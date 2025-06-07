@@ -3,13 +3,11 @@ import type { NewProduct } from "../types";
 
 interface AddFormProps {
   setShowAddProductForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowAddProductButton: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: (newProduct: NewProduct, callback?: () => void) => Promise<void>;
 }
 
 function AddForm({
   setShowAddProductForm,
-  setShowAddProductButton,
   onSubmit,
 }: AddFormProps) {
   const [title, setTitle] = useState("");
@@ -21,7 +19,6 @@ function AddForm({
     setPrice("");
     setQuantity("");
     setShowAddProductForm(false);
-    setShowAddProductButton(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
