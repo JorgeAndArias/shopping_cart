@@ -17,6 +17,15 @@ function ProductListing({
   return (
     <div className="product-listing">
       <h2>Products</h2>
+      <div className="product-sorting">
+        <h3>Sort by:</h3>
+        <div className="product-sorting-buttons">
+          <button>Name</button>
+          <button>Price</button>
+          <button>Quantity</button>
+        </div>
+      </div>
+
       <ul className="product-list">
         <ProductItem
           products={products}

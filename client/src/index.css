@@ -42,6 +42,7 @@ main {
 h2 {
   font-size: 22px;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 header h2 {
@@ -199,4 +200,42 @@ th {
 table td.total {
   text-align: right;
   padding-top: 20px;
+}
+
+.product-sorting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.product-sorting h3 {
+  margin: 0;
+}
+
+.product-sorting button {
+  margin-left: 0.5rem;
+}
+
+.product-sorting-buttons {
+  display: flex;
+}
+
+.product-sorting-buttons button {
+  margin-left: 0.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid #ccc;
+  background-color: #07575b;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.product-sorting-buttons button:hover {
+  background-color: #91c1c4;
+}
+
+.product-sorting-buttons button.active {
+  background-color: #91c1c4;
+  color: white;
+  border-color: #ccc;
 }
