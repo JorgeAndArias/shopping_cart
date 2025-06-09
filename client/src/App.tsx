@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import type { Product, NewProduct, CartItem } from "./types";
+import type { Product, NewProduct } from "./types";
 import {
   createProduct,
   deleteProduct,
@@ -10,20 +10,24 @@ import {
   updateProduct,
 } from "./services/product";
 import { addToCart, cartCheckout, getCart } from "./services/cart";
+import { productReducer, productAction } from "./reducers/productReducer";
+import { cartAction, cartReducer } from "./reducers/cartReducer";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [products, productsDispatch] = useReducer(productReducer, []);
+  const [cartItems, cartDispatch] = useReducer(cartReducer, []);
+  // const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       const data = await getProducts();
-      setProducts(data);
+      productsDispatch(productAction.SetProducts(data));
     };
 
     const fetchCartItems = async () => {
       const data = await getCart();
-      setCartItems(data);
+      // setCartItems(data);
+      cartDispatch(cartAction.setCart(data));
     };
 
     fetchProducts();
@@ -36,7 +40,7 @@ function App() {
   ) => {
     try {
       const data = await createProduct(newProduct);
-      setProducts((prev) => prev.concat(data));
+      productsDispatch(productAction.AddProduct(data));
       if (callback) {
         callback();
       }
@@ -49,9 +53,7 @@ function App() {
   const handleEdit = async (updatedProduct: Product, callback?: () => void) => {
     try {
       const data = await updateProduct(updatedProduct._id, updatedProduct);
-      setProducts(
-        products.map((product) => (product._id === data._id ? data : product))
-      );
+      productsDispatch(productAction.updateProduct(data));
 
       if (callback) {
         callback();
@@ -62,11 +64,10 @@ function App() {
     }
   };
 
-  const handledDelete = async (productId: string, callback?: () => void) => {
+  const handleDelete = async (productId: string, callback?: () => void) => {
     try {
       await deleteProduct(productId);
-      setProducts(products.filter((product) => product._id !== productId));
-
+      productsDispatch(productAction.deleteProduct(productId));
       if (callback) {
         callback();
       }
@@ -79,15 +80,9 @@ function App() {
   const handleAddToCart = async (productId: string, callback?: () => void) => {
     try {
       const { product, item } = await addToCart(productId);
-      setProducts(products.map((p) => (p._id === product._id ? product : p)));
 
-      if (cartItems.find((i) => i.productId === productId)) {
-        setCartItems(
-          cartItems.map((i) => (i.productId === productId ? item : i))
-        );
-      } else {
-        setCartItems((prev) => prev.concat(item));
-      }
+      productsDispatch(productAction.updateProduct(product));
+      cartDispatch(cartAction.addToCart(item));
 
       if (callback) {
         callback();
@@ -101,7 +96,8 @@ function App() {
   const handleCheckout = async () => {
     try {
       await cartCheckout();
-      setCartItems([]);
+      // setCartItems([]);
+      cartDispatch(cartAction.checkout());
     } catch (e) {
       console.error(e);
       throw e;
@@ -115,7 +111,7 @@ function App() {
         products={products}
         onSubmit={handleSubmit}
         onEdit={handleEdit}
-        onDelete={handledDelete}
+        onDelete={handleDelete}
         onAddToCart={handleAddToCart}
       />
     </div>
