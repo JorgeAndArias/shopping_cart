@@ -7,28 +7,28 @@ interface SetAction {
   };
 }
 
-interface AddtAction {
+interface AddAction {
   type: "ADD_PRODUCT";
   payload: {
     product: Product;
   };
 }
 
-interface UpdatetAction {
+interface UpdateAction {
   type: "UPDATE_PRODUCT";
   payload: {
     product: Product;
   };
 }
 
-interface DeletetAction {
+interface DeleteAction {
   type: "DELETE_PRODUCT";
   payload: {
     productId: string;
   };
 }
 
-type Action = SetAction | AddtAction | UpdatetAction | DeletetAction;
+type Action = SetAction | AddAction | UpdateAction | DeleteAction;
 
 export const productAction = {
   SetProducts: (products: Product[]): SetAction => ({
@@ -37,19 +37,19 @@ export const productAction = {
       products,
     },
   }),
-  AddProduct: (product: Product): AddtAction => ({
+  AddProduct: (product: Product): AddAction => ({
     type: "ADD_PRODUCT",
     payload: {
       product,
     },
   }),
-  updateProduct: (product: Product): UpdatetAction => ({
+  updateProduct: (product: Product): UpdateAction => ({
     type: "UPDATE_PRODUCT",
     payload: {
       product,
     },
   }),
-  deleteProduct: (productId: string): DeletetAction => ({
+  deleteProduct: (productId: string): DeleteAction => ({
     type: "DELETE_PRODUCT",
     payload: {
       productId,
