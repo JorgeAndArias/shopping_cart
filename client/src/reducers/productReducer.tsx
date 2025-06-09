@@ -1,7 +1,7 @@
 import type { Product } from "../types";
 
 interface SetAction {
-  type: "SET_PRODUCT";
+  type: "SET_PRODUCTS";
   payload: {
     products: Product[];
   };
@@ -32,7 +32,7 @@ type Action = SetAction | AddAction | UpdateAction | DeleteAction;
 
 export const productAction = {
   SetProducts: (products: Product[]): SetAction => ({
-    type: "SET_PRODUCT",
+    type: "SET_PRODUCTS",
     payload: {
       products,
     },
@@ -59,7 +59,7 @@ export const productAction = {
 
 export function productReducer(products: Product[], action: Action): Product[] {
   switch (action.type) {
-    case "SET_PRODUCT": {
+    case "SET_PRODUCTS": {
       return action.payload.products;
     }
     case "ADD_PRODUCT": {
