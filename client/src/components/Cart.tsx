@@ -15,9 +15,6 @@ function Cart({ cartItems, onCheckout }: CartProps) {
         <>
           <p>Your cart is empty</p>
           <p>Total: $0</p>
-          {/* <button className="checkout" disabled>
-            Checkout
-          </button> */}
         </>
       ) : (
         <>
@@ -40,11 +37,6 @@ function Cart({ cartItems, onCheckout }: CartProps) {
               </tr>
             </tfoot>
           </table>
-          {/* <div className="checkout-button">
-            <button className="checkout" onClick={onCheckout}>
-              Checkout
-            </button>
-          </div> */}
         </>
       )}
       <div className="checkout-button">
