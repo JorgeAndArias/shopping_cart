@@ -1,8 +1,8 @@
-import { useState, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import type { Product, NewProduct, CartItem } from "./types";
+import type { Product, NewProduct } from "./types";
 import {
   createProduct,
   deleteProduct,
@@ -11,10 +11,12 @@ import {
 } from "./services/product";
 import { addToCart, cartCheckout, getCart } from "./services/cart";
 import { productReducer, productAction } from "./reducers/productReducer";
+import { cartAction, cartReducer } from "./reducers/cartReducer";
 
 function App() {
   const [products, productsDispatch] = useReducer(productReducer, []);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, cartDispatch] = useReducer(cartReducer, []);
+  // const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,7 +26,8 @@ function App() {
 
     const fetchCartItems = async () => {
       const data = await getCart();
-      setCartItems(data);
+      // setCartItems(data);
+      cartDispatch(cartAction.setCart(data));
     };
 
     fetchProducts();
@@ -77,15 +80,9 @@ function App() {
   const handleAddToCart = async (productId: string, callback?: () => void) => {
     try {
       const { product, item } = await addToCart(productId);
-      productsDispatch(productAction.updateProduct(product));
 
-      if (cartItems.find((i) => i.productId === productId)) {
-        setCartItems(
-          cartItems.map((i) => (i.productId === productId ? item : i))
-        );
-      } else {
-        setCartItems((prev) => prev.concat(item));
-      }
+      productsDispatch(productAction.updateProduct(product));
+      cartDispatch(cartAction.addToCart(item));
 
       if (callback) {
         callback();
@@ -99,7 +96,8 @@ function App() {
   const handleCheckout = async () => {
     try {
       await cartCheckout();
-      setCartItems([]);
+      // setCartItems([]);
+      cartDispatch(cartAction.checkout());
     } catch (e) {
       console.error(e);
       throw e;
