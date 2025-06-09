@@ -19,12 +19,9 @@ function Main({
   onAddToCart,
 }: MainProps) {
   const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
-  const [showAddProductButton, setShowAddProductButton] =
-    useState<boolean>(true);
 
   const handleShowAddProductForm = () => {
     setShowAddProductForm(true);
-    setShowAddProductButton(false);
   };
 
   return (
@@ -35,13 +32,12 @@ function Main({
         onDelete={onDelete}
         onAddToCart={onAddToCart}
       />
-      {showAddProductButton && (
+      {!showAddProductForm && (
         <button onClick={handleShowAddProductForm}>Add a Product</button>
       )}
       {showAddProductForm && (
         <AddForm
           setShowAddProductForm={setShowAddProductForm}
-          setShowAddProductButton={setShowAddProductButton}
           onSubmit={onSubmit}
         />
       )}
