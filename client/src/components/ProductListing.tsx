@@ -1,4 +1,4 @@
-import type { Product } from "../types";
+import type { Product, SortKey, SortOrder } from "../types";
 import ProductItem from "./ProductItem";
 
 interface ProductListingProps {
@@ -6,6 +6,9 @@ interface ProductListingProps {
   onEdit: (updatedProduct: Product, callback?: () => void) => Promise<void>;
   onDelete: (productId: string, callback?: () => void) => Promise<void>;
   onAddToCart: (productId: string, callback?: () => void) => Promise<void>;
+  onProductSort: (key: SortKey) => void;
+  sortKey: SortKey;
+  sortOrder: SortOrder;
 }
 
 function ProductListing({
@@ -13,16 +16,39 @@ function ProductListing({
   onEdit,
   onDelete,
   onAddToCart,
+  onProductSort,
+  sortKey,
+  sortOrder,
 }: ProductListingProps) {
+  const getArrow = (key: SortKey) => {
+    if (sortKey !== key) return "";
+    return sortOrder === "asc" ? " ↑" : " ↓";
+  };
+
   return (
     <div className="product-listing">
       <h2>Products</h2>
       <div className="product-sorting">
         <h3>Sort by:</h3>
         <div className="product-sorting-buttons">
-          <button>Name</button>
-          <button>Price</button>
-          <button>Quantity</button>
+          <button
+            className={sortKey === "title" ? "active" : ""}
+            onClick={() => onProductSort("title")}
+          >
+            Name{getArrow("title")}
+          </button>
+          <button
+            className={sortKey === "price" ? "active" : ""}
+            onClick={() => onProductSort("price")}
+          >
+            Price{getArrow("price")}
+          </button>
+          <button
+            className={sortKey === "quantity" ? "active" : ""}
+            onClick={() => onProductSort("quantity")}
+          >
+            Quantity{getArrow("quantity")}
+          </button>
         </div>
       </div>
 

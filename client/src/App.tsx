@@ -1,8 +1,8 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import type { Product, NewProduct } from "./types";
+import type { Product, NewProduct, SortKey, SortOrder } from "./types";
 import {
   createProduct,
   deleteProduct,
@@ -16,11 +16,13 @@ import { cartAction, cartReducer } from "./reducers/cartReducer";
 function App() {
   const [products, productsDispatch] = useReducer(productReducer, []);
   const [cartItems, cartDispatch] = useReducer(cartReducer, []);
+  const [sortKey, setSortKey] = useState<SortKey>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
   useEffect(() => {
     const fetchProducts = async () => {
       const data = await getProducts();
-      productsDispatch(productAction.SetProducts(data));
+      productsDispatch(productAction.SetProducts(data, sortKey, sortOrder));
     };
 
     const fetchCartItems = async () => {
@@ -30,7 +32,7 @@ function App() {
 
     fetchProducts();
     fetchCartItems();
-  }, []);
+  }, [sortKey, sortOrder]);
 
   const handleSubmit = async (
     newProduct: NewProduct,
@@ -94,11 +96,19 @@ function App() {
   const handleCheckout = async () => {
     try {
       await cartCheckout();
-      // setCartItems([]);
       cartDispatch(cartAction.checkout());
     } catch (e) {
       console.error(e);
       throw e;
+    }
+  };
+
+  const handleProductSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortOrder("asc");
     }
   };
 
@@ -111,6 +121,9 @@ function App() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onAddToCart={handleAddToCart}
+        onProductSort={handleProductSort}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
       />
     </div>
   );

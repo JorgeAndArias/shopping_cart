@@ -1,4 +1,4 @@
-import type { Product, NewProduct } from "../types";
+import type { Product, NewProduct, SortKey, SortOrder } from "../types";
 import AddForm from "./AddForm";
 import ProductListing from "./ProductListing";
 import { useState } from "react";
@@ -9,6 +9,9 @@ interface MainProps {
   onEdit: (updatedProduct: Product, callback?: () => void) => Promise<void>;
   onDelete: (productId: string, callback?: () => void) => Promise<void>;
   onAddToCart: (productId: string, callback?: () => void) => Promise<void>;
+  onProductSort: (key: SortKey) => void;
+  sortKey: SortKey;
+  sortOrder: SortOrder;
 }
 
 function Main({
@@ -17,6 +20,9 @@ function Main({
   onEdit,
   onDelete,
   onAddToCart,
+  onProductSort,
+  sortKey,
+  sortOrder,
 }: MainProps) {
   const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
 
@@ -31,6 +37,9 @@ function Main({
         onEdit={onEdit}
         onDelete={onDelete}
         onAddToCart={onAddToCart}
+        onProductSort={onProductSort}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
       />
       {!showAddProductForm && (
         <button onClick={handleShowAddProductForm}>Add a Product</button>
