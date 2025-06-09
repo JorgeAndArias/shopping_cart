@@ -16,7 +16,6 @@ import { cartAction, cartReducer } from "./reducers/cartReducer";
 function App() {
   const [products, productsDispatch] = useReducer(productReducer, []);
   const [cartItems, cartDispatch] = useReducer(cartReducer, []);
-  // const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -26,7 +25,6 @@ function App() {
 
     const fetchCartItems = async () => {
       const data = await getCart();
-      // setCartItems(data);
       cartDispatch(cartAction.setCart(data));
     };
 
