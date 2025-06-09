@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
@@ -10,15 +10,16 @@ import {
   updateProduct,
 } from "./services/product";
 import { addToCart, cartCheckout, getCart } from "./services/cart";
+import { productReducer, productAction } from "./reducers/productReducer";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, productsDispatch] = useReducer(productReducer, []);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       const data = await getProducts();
-      setProducts(data);
+      productsDispatch(productAction.SetProducts(data));
     };
 
     const fetchCartItems = async () => {
@@ -36,7 +37,7 @@ function App() {
   ) => {
     try {
       const data = await createProduct(newProduct);
-      setProducts((prev) => prev.concat(data));
+      productsDispatch(productAction.AddProduct(data));
       if (callback) {
         callback();
       }
@@ -49,9 +50,7 @@ function App() {
   const handleEdit = async (updatedProduct: Product, callback?: () => void) => {
     try {
       const data = await updateProduct(updatedProduct._id, updatedProduct);
-      setProducts(
-        products.map((product) => (product._id === data._id ? data : product))
-      );
+      productsDispatch(productAction.updateProduct(data));
 
       if (callback) {
         callback();
@@ -62,11 +61,10 @@ function App() {
     }
   };
 
-  const handledDelete = async (productId: string, callback?: () => void) => {
+  const handleDelete = async (productId: string, callback?: () => void) => {
     try {
       await deleteProduct(productId);
-      setProducts(products.filter((product) => product._id !== productId));
-
+      productsDispatch(productAction.deleteProduct(productId));
       if (callback) {
         callback();
       }
@@ -79,7 +77,7 @@ function App() {
   const handleAddToCart = async (productId: string, callback?: () => void) => {
     try {
       const { product, item } = await addToCart(productId);
-      setProducts(products.map((p) => (p._id === product._id ? product : p)));
+      productsDispatch(productAction.updateProduct(product));
 
       if (cartItems.find((i) => i.productId === productId)) {
         setCartItems(
@@ -115,7 +113,7 @@ function App() {
         products={products}
         onSubmit={handleSubmit}
         onEdit={handleEdit}
-        onDelete={handledDelete}
+        onDelete={handleDelete}
         onAddToCart={handleAddToCart}
       />
     </div>
