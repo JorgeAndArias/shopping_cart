@@ -9,9 +9,9 @@ interface MainProps {
   onEdit: (updatedProduct: Product, callback?: () => void) => Promise<void>;
   onDelete: (productId: string, callback?: () => void) => Promise<void>;
   onAddToCart: (productId: string, callback?: () => void) => Promise<void>;
-  onProductSort: (key: SortKey) => void;
   sortKey: SortKey;
   sortOrder: SortOrder;
+  onProductSort: (key: SortKey) => void;
 }
 
 function Main({
@@ -20,9 +20,9 @@ function Main({
   onEdit,
   onDelete,
   onAddToCart,
-  onProductSort,
   sortKey,
   sortOrder,
+  onProductSort,
 }: MainProps) {
   const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
 
@@ -37,9 +37,9 @@ function Main({
         onEdit={onEdit}
         onDelete={onDelete}
         onAddToCart={onAddToCart}
-        onProductSort={onProductSort}
         sortKey={sortKey}
         sortOrder={sortOrder}
+        onProductSort={onProductSort}
       />
       {!showAddProductForm && (
         <button onClick={handleShowAddProductForm}>Add a Product</button>

@@ -88,7 +88,10 @@ function sortByKey(
   });
 }
 
-export function productReducer(products: Product[], action: Action): Product[] {
+export const productReducer = (
+  products: Product[],
+  action: Action
+): Product[] => {
   switch (action.type) {
     case "SET_PRODUCTS": {
       return sortByKey(
@@ -117,4 +120,4 @@ export function productReducer(products: Product[], action: Action): Product[] {
       throw new Error("Unhandled action: " + _exhaustiveCheck);
     }
   }
-}
+};

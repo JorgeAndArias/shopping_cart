@@ -30,5 +30,11 @@ export const addToCartResponseSchema = z.object({
 export type Product = z.infer<typeof productSchema>;
 export type NewProduct = z.infer<typeof newProductSchema>;
 export type CartItem = z.infer<typeof cartItemSchema>;
+
 export type SortKey = "title" | "price" | "quantity" | null;
 export type SortOrder = "asc" | "desc";
+
+export interface Sort {
+  key: SortKey;
+  order: SortOrder;
+}

@@ -6,9 +6,9 @@ interface ProductListingProps {
   onEdit: (updatedProduct: Product, callback?: () => void) => Promise<void>;
   onDelete: (productId: string, callback?: () => void) => Promise<void>;
   onAddToCart: (productId: string, callback?: () => void) => Promise<void>;
-  onProductSort: (key: SortKey) => void;
   sortKey: SortKey;
   sortOrder: SortOrder;
+  onProductSort: (key: SortKey) => void;
 }
 
 function ProductListing({
@@ -16,9 +16,9 @@ function ProductListing({
   onEdit,
   onDelete,
   onAddToCart,
-  onProductSort,
   sortKey,
   sortOrder,
+  onProductSort,
 }: ProductListingProps) {
   const getArrow = (key: SortKey) => {
     if (sortKey !== key) return "";
@@ -48,6 +48,12 @@ function ProductListing({
             onClick={() => onProductSort("quantity")}
           >
             Quantity{getArrow("quantity")}
+          </button>
+          <button
+            className={!sortKey ? "active" : ""}
+            onClick={() => onProductSort(null)}
+          >
+            Reset
           </button>
         </div>
       </div>

@@ -6,5 +6,5 @@
   ],
   "compilerOptions": {
     "types": ["@testing-library/jest-dom/vitest", "vitest/globals"]
-  }
+  },
 }

@@ -1,8 +1,8 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import type { Product, NewProduct, SortKey, SortOrder } from "./types";
+import type { Product, NewProduct, SortKey } from "./types";
 import {
   createProduct,
   deleteProduct,
@@ -10,19 +10,22 @@ import {
   updateProduct,
 } from "./services/product";
 import { addToCart, cartCheckout, getCart } from "./services/cart";
-import { productReducer, productAction } from "./reducers/productReducer";
+import { productAction, productReducer } from "./reducers/productReducer";
 import { cartAction, cartReducer } from "./reducers/cartReducer";
+import { sortAction, sortReducer } from "./reducers/sortReducer";
 
 function App() {
   const [products, productsDispatch] = useReducer(productReducer, []);
   const [cartItems, cartDispatch] = useReducer(cartReducer, []);
-  const [sortKey, setSortKey] = useState<SortKey>(null);
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sort, sortDispatch] = useReducer(sortReducer, {
+    key: null,
+    order: "asc",
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
       const data = await getProducts();
-      productsDispatch(productAction.SetProducts(data, sortKey, sortOrder));
+      productsDispatch(productAction.SetProducts(data, sort.key, sort.order));
     };
 
     const fetchCartItems = async () => {
@@ -32,7 +35,7 @@ function App() {
 
     fetchProducts();
     fetchCartItems();
-  }, [sortKey, sortOrder]);
+  }, [sort.key, sort.order]);
 
   const handleSubmit = async (
     newProduct: NewProduct,
@@ -104,12 +107,7 @@ function App() {
   };
 
   const handleProductSort = (key: SortKey) => {
-    if (sortKey === key) {
-      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-    } else {
-      setSortKey(key);
-      setSortOrder("asc");
-    }
+    sortDispatch(sortAction.sortProducts(key));
   };
 
   return (
@@ -121,9 +119,9 @@ function App() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onAddToCart={handleAddToCart}
+        sortKey={sort.key}
+        sortOrder={sort.order}
         onProductSort={handleProductSort}
-        sortKey={sortKey}
-        sortOrder={sortOrder}
       />
     </div>
   );
