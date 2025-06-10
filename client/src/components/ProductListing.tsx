@@ -1,5 +1,6 @@
 import type { Product, SortKey, SortOrder } from "../types";
 import ProductItem from "./ProductItem";
+import { SortButtons } from "./SortButton";
 
 interface ProductListingProps {
   products: Product[];
@@ -20,41 +21,17 @@ function ProductListing({
   sortOrder,
   onProductSort,
 }: ProductListingProps) {
-  const getArrow = (key: SortKey) => {
-    if (sortKey !== key) return "";
-    return sortOrder === "asc" ? " ↑" : " ↓";
-  };
-
   return (
     <div className="product-listing">
       <h2>Products</h2>
       <div className="product-sorting">
         <h3>Sort by:</h3>
         <div className="product-sorting-buttons">
-          <button
-            className={sortKey === "title" ? "active" : ""}
-            onClick={() => onProductSort("title")}
-          >
-            Name{getArrow("title")}
-          </button>
-          <button
-            className={sortKey === "price" ? "active" : ""}
-            onClick={() => onProductSort("price")}
-          >
-            Price{getArrow("price")}
-          </button>
-          <button
-            className={sortKey === "quantity" ? "active" : ""}
-            onClick={() => onProductSort("quantity")}
-          >
-            Quantity{getArrow("quantity")}
-          </button>
-          <button
-            className={!sortKey ? "active" : ""}
-            onClick={() => onProductSort(null)}
-          >
-            Reset
-          </button>
+          <SortButtons
+            sortKey={sortKey}
+            onSort={onProductSort}
+            sortOrder={sortOrder}
+          />
         </div>
       </div>
 
