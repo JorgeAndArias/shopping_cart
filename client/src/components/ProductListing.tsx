@@ -1,6 +1,6 @@
 import type { Product, SortKey, SortOrder } from "../types";
 import ProductItem from "./ProductItem";
-import { SortButtons } from "./SortButton";
+import { SortButtons } from "./SortButtons";
 
 interface ProductListingProps {
   products: Product[];
